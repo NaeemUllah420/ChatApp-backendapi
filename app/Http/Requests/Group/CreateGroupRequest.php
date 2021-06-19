@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Group;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class CreateGroupRequest extends FormRequest
 {
@@ -21,23 +22,23 @@ class CreateGroupRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
-            'name'=>'required',
-            'type'=>'nullable|in:private,public',
-            'members'=>'array|nullable',
-            'members.*'=>['exists:users,email','distinct']
+            'name' => 'required',
+            'type' => 'nullable|in:private,public',
+            'members' => 'array|nullable',
+            'members.*' => ['exists:users,email', 'distinct', 'not_in:' . $request->user->email],
         ];
     }
 
     public function withValidator($validator)
     {
-        if(!$validator->fails()){
+        if (!$validator->fails()) {
             $validator->after(function ($validator) {
-
-                // if((isset($this->receiver_id) && !empty($this->receiver_id)) && (isset($this->receiver_id) && !empty($this->group_id)))
-                    // $validator->errors()->add('error','Invalid request');
+                if (app(Request::class)->user->groups()->where("name", $this->name)->get()->count()) {
+                    $validator->errors()->add('error', 'Group name already exists');
+                }
             });
         }
 

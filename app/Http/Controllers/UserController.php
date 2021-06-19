@@ -53,5 +53,16 @@ class UserController extends Controller
         }
     }
 
-
+    public function logout(Request $request)
+    {
+        if($request->user->token=$request->header('token'))
+        {
+            $request->user->update(['token'=>null]);
+            $response=response()->success("User Logged Out Successfully");
+        }
+        else{
+           $response=response()->forbidden();   
+        }
+        return $response;
+    }
 }

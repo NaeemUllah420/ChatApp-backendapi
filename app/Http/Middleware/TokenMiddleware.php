@@ -25,7 +25,7 @@ class TokenMiddleware
         }
         else
         {
-            return response()->json(["message"=>"unauthorized access"]);
+            return response()->forbidden(); ;
         }
         return $next($request);
     }

@@ -40,8 +40,13 @@ class ResponseMacroServiceProvider extends ServiceProvider
         });
 
         Response::macro('failed', function ($message) {
-            $response=["error_status"=>false,"message"=>$message];
+            $response=["error_status"=>true,"message"=>$message];
             return response()->json($response,HttpResponse::HTTP_EXPECTATION_FAILED);
+        });
+
+        Response::macro('forbidden', function ($message="You are not authorized to perform this action.") {
+            $response=["error_status"=>true,"message"=>$message];
+            return response()->json($response,HttpResponse::HTTP_FORBIDDEN);
         });
     }
 }

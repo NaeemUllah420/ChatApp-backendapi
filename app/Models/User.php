@@ -28,6 +28,7 @@ class User extends Model implements Authenticatable
         'email',
         'password',
         'token',
+        'role',
     ];
 
     /**
@@ -51,6 +52,15 @@ class User extends Model implements Authenticatable
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'user_group', 'user_id', 'group_id');
+        return $this->belongsToMany(Group::class);
+    }
+
+    public function send_messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+    public function received_messages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 }

@@ -13,10 +13,10 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class Group extends Model implements Authenticatable
 {
     use HasFactory, Notifiable, AuthAuthenticatable, SoftDeletes;
-    protected $fillable = ['name', 'type', 'owner_id'];
+    protected $fillable = ['name', 'type', 'owner_id', 'role'];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_group');
+        return $this->belongsToMany(User::class);
     }
 }
