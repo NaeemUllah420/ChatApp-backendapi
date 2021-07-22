@@ -61,7 +61,7 @@ class UserController extends Controller
             $response=response()->success("User Logged Out Successfully");
         }
         else{
-           $response=response()->forbidden();   
+           $response=response()->forbidden();
         }
         return $response;
     }
